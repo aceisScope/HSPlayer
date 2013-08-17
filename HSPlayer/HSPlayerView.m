@@ -48,6 +48,15 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 @property (nonatomic, strong) UIView *bottomControlView;
 @property (nonatomic, strong) UIButton *playPauseControlButton;
 
+// PopUps
+@property (nonatomic, strong) NSMutableArray *popUps;
+- (void)syncPopUps;
+-(void)pauseLayer:(CALayer*)layer;
+-(void)resumeLayer:(CALayer*)layer;
+- (void)pausePopUps;
+- (void)resumePopUps;
+- (void)cleanupAllPopups;
+
 // Gesture Recognizers
 @property (nonatomic, strong) UITapGestureRecognizer *singleTapRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *doubleTapRecognizer;
@@ -105,6 +114,8 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 
 @synthesize bottomControlView = _bottomControlView;
 @synthesize playPauseControlButton = _playPauseControlButton;
+
+@synthesize popUps = _popUps;
 
 @synthesize singleTapRecognizer = _singleTapRecognizer;
 @synthesize doubleTapRecognizer = _doubleTapRecognizer;
@@ -403,6 +414,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(40., 11., _bottomControlView.bounds.size.width-50., 18.)];
         [volumeView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth)];
         [_bottomControlView addSubview:volumeView];
+        volumeView.backgroundColor = [UIColor blueColor];
 
         [self.playPauseControlButton setFrame:CGRectMake(10., 10., 20., 20.)];
         [_bottomControlView addSubview:self.playPauseControlButton];
@@ -421,7 +433,17 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
     return _playPauseControlButton;
 }
 
-#pragma mark -
+#pragma mark - popups
+
+- (NSMutableArray*)popUps {
+    if (!_popUps){
+        _popUps = [NSMutableArray array];
+    }
+    
+    return _popUps;
+}
+
+#pragma mark - gesture
 
 - (UITapGestureRecognizer *)singleTapRecognizer {
     if (!_singleTapRecognizer) {
@@ -453,10 +475,12 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 	}
     
     [self.player play];
+    [self resumePopUps];
 }
 
 - (void)pause:(id)sender {
     [self.player pause];
+    [self pausePopUps];
 }
 
 - (BOOL)isPlaying {
@@ -586,6 +610,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
                                                                HSPlayerView *strongSelf = weakSelf;
                                                                if (CMTIME_IS_VALID(strongSelf.player.currentTime) && CMTIME_IS_VALID(strongSelf.duration))
                                                                    [strongSelf syncScrobber];
+                                                                   [strongSelf syncPopUps];
                                                            }];
         
         [self setPlayerTimeObserver:observer];
@@ -619,6 +644,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 }
 
 - (void)endScrubbing:(id)sender {
+    [self cleanupAllPopups];
     [self.player setRate:self.restoreAfterScrubbingRate];
     [self setScrubbing:NO];
     [self addPlayerTimeObserver];
@@ -643,7 +669,63 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
     [self.scrubberControlSlider setMaximumValue:duration];
     [self.scrubberControlSlider setValue:currentSeconds];
     
-    NSLog(@"%@", self.player.currentItem.seekableTimeRanges);
+    //NSLog(@"%@", self.player.currentItem.seekableTimeRanges);
+}
+
+- (void)syncPopUps {
+    if (CMTimeGetSeconds(self.player.currentTime) >= 4.5 && CMTimeGetSeconds(self.player.currentTime) <= 5.) {
+        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, 40., 100, 60.)];
+        pop.text = @"哈哈哈哈哈哈";
+        [self.popUps addObject:pop];
+        [self addSubview:pop];
+        
+        [UIView animateWithDuration:5
+                         animations:^(void){
+                             pop.frame = CGRectMake(-100., 40., 100, 40.);
+                         }
+                         completion:^(BOOL finished){
+                             [pop removeFromSuperview];
+                             [_popUps removeObject:pop];
+                         }];
+    }
+}
+
+
+-(void)pauseLayer:(CALayer*)layer
+{
+    CFTimeInterval pausedTime = [layer convertTime:CACurrentMediaTime() fromLayer:nil];
+    layer.speed = 0.0;
+    layer.timeOffset = pausedTime;
+}
+
+-(void)resumeLayer:(CALayer*)layer
+{
+    CFTimeInterval pausedTime = [layer timeOffset];
+    layer.speed = 1.0;
+    layer.timeOffset = 0.0;
+    layer.beginTime = 0.0;
+    CFTimeInterval timeSincePause = [layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
+    layer.beginTime = timeSincePause;
+}
+
+- (void)pausePopUps {
+    for (UILabel *popup in _popUps){
+        [self pauseLayer:popup.layer];
+    }
+}
+
+- (void)resumePopUps {
+    for (UILabel *popup in _popUps){
+        [self resumeLayer:popup.layer];
+    }
+}
+
+- (void)cleanupAllPopups {
+    for (UILabel *popup in _popUps){
+        [popup.layer removeAllAnimations];
+        [popup removeFromSuperview];
+    }
+    [_popUps removeAllObjects];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
