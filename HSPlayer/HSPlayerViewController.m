@@ -45,7 +45,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.playerView setURL:[NSURL URLWithString:@"http://www0.c90910.dna.qbrick.com/90910/od/20111127/PG-1155973-010A-STARKEMAN2-01-hts-a-v1/PG-1155973-010A-STARKEMAN2-01-hts-a-v1_vod.m3u8"]];
+    [self.playerView setURL:[NSURL URLWithString:@"http://hot.vrs.sohu.com/ipad1225487_4587141426621_4436708.m3u8?plat=0"]];
     /*
     double delayInSeconds = 7.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
