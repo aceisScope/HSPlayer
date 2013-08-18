@@ -410,11 +410,11 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         _bottomControlView = [[UIView alloc] initWithFrame:CGRectMake(0., self.bounds.size.height-40., self.bounds.size.width, 40.)];
         [_bottomControlView setBackgroundColor:[UIColor colorWithWhite:0. alpha:.5]];
         [_bottomControlView setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth)];
-
+        
+        // MPVolumeView only shows on device, not simulator
         MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(40., 11., _bottomControlView.bounds.size.width-50., 18.)];
         [volumeView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth)];
         [_bottomControlView addSubview:volumeView];
-        volumeView.backgroundColor = [UIColor blueColor];
 
         [self.playPauseControlButton setFrame:CGRectMake(10., 10., 20., 20.)];
         [_bottomControlView addSubview:self.playPauseControlButton];
