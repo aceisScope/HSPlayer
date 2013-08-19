@@ -50,6 +50,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 
 // PopUps
 @property (nonatomic, strong) NSMutableArray *popUps;
+@property (nonatomic, readwrite) NSInteger slot;
 - (void)syncPopUps;
 -(void)pauseLayer:(CALayer*)layer;
 -(void)resumeLayer:(CALayer*)layer;
@@ -116,6 +117,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 @synthesize playPauseControlButton = _playPauseControlButton;
 
 @synthesize popUps = _popUps;
+@synthesize slot = _slot;
 
 @synthesize singleTapRecognizer = _singleTapRecognizer;
 @synthesize doubleTapRecognizer = _doubleTapRecognizer;
@@ -673,19 +675,26 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 }
 
 - (void)syncPopUps {
+    
+    CGFloat topMargin = 10.f;
+    CGFloat height = 40.f;
+    
     if (CMTimeGetSeconds(self.player.currentTime) >= 4.5 && CMTimeGetSeconds(self.player.currentTime) <= 5.) {
-        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, 40., 2*self.bounds.size.width, 40.)];
+        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, topMargin + (self.slot%6)*height, 2*self.bounds.size.width, height)];
         pop.backgroundColor = [UIColor clearColor];
         pop.textColor = [UIColor whiteColor];
         pop.text = @"哈哈哈哈哈哈";
         [pop sizeToFit];
         
+        NSInteger temp_slot = self.slot;
+        
         [self.popUps addObject:pop];
+        self.slot ++;
         [self addSubview:pop];
         
-        [UIView animateWithDuration:5
+        [UIView animateWithDuration:3
                          animations:^(void){
-                             pop.frame = CGRectMake(-100., 40., 100, 40.);
+                             pop.frame = CGRectMake(-pop.frame.size.width, topMargin + (temp_slot%6)*height, pop.frame.size.width, height);
                          }
                          completion:^(BOOL finished){
                              [pop removeFromSuperview];
@@ -694,18 +703,21 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
     }
     
     if (CMTimeGetSeconds(self.player.currentTime) >= 6.5 && CMTimeGetSeconds(self.player.currentTime) <= 7.) {
-        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, 70., 2*self.bounds.size.width, 40.)];
+        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, topMargin + (self.slot%6)*height, 2*self.bounds.size.width, height)];
         pop.backgroundColor = [UIColor clearColor];
         pop.textColor = [UIColor whiteColor];
         pop.text = @"吼吼吼吼吼吼吼吼吼~~~~~~";
         [pop sizeToFit];
         
+        NSInteger temp_slot = self.slot;
+        
         [self.popUps addObject:pop];
+        self.slot ++;
         [self addSubview:pop];
         
-        [UIView animateWithDuration:5
+        [UIView animateWithDuration:3
                          animations:^(void){
-                             pop.frame = CGRectMake(-pop.frame.size.width, 70., pop.frame.size.width, 40.);
+                             pop.frame = CGRectMake(-pop.frame.size.width, topMargin + (temp_slot%6)*height, pop.frame.size.width, height);
                          }
                          completion:^(BOOL finished){
                              [pop removeFromSuperview];
