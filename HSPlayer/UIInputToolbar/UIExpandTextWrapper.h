@@ -20,5 +20,7 @@
 @property (nonatomic, strong) UIViewController *superViewController;
 
 - (id)initWithSuperViewController:(UIViewController*)viewController;
+- (void)showTextBar;
+- (void)hideTextBar;
 
 @end
