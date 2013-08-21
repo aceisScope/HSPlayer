@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		885AC77717C48CAC00BA7DC8 /* UIExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 885AC77217C48CAC00BA7DC8 /* UIExpandingTextView.m */; };
+		885AC77817C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 885AC77417C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m */; };
+		885AC77917C48CAC00BA7DC8 /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 885AC77617C48CAC00BA7DC8 /* UIInputToolbar.m */; };
 		F42B535B1485092400563B55 /* HSSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = F42B535A1485092400563B55 /* HSSlider.m */; };
 		F4443E41148078F300B35F2D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4443E40148078F300B35F2D /* UIKit.framework */; };
 		F4443E43148078F300B35F2D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4443E42148078F300B35F2D /* Foundation.framework */; };
@@ -23,6 +26,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		885AC77117C48CAC00BA7DC8 /* UIExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIExpandingTextView.h; sourceTree = "<group>"; };
+		885AC77217C48CAC00BA7DC8 /* UIExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIExpandingTextView.m; sourceTree = "<group>"; };
+		885AC77317C48CAC00BA7DC8 /* UIExpandingTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIExpandingTextViewInternal.h; sourceTree = "<group>"; };
+		885AC77417C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIExpandingTextViewInternal.m; sourceTree = "<group>"; };
+		885AC77517C48CAC00BA7DC8 /* UIInputToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInputToolbar.h; sourceTree = "<group>"; };
+		885AC77617C48CAC00BA7DC8 /* UIInputToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputToolbar.m; sourceTree = "<group>"; };
 		F42B53591485092400563B55 /* HSSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSSlider.h; sourceTree = "<group>"; };
 		F42B535A1485092400563B55 /* HSSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSSlider.m; sourceTree = "<group>"; };
 		F4443E3C148078F300B35F2D /* HSPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HSPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +72,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		885AC77017C48CAC00BA7DC8 /* UIInputToolbar */ = {
+			isa = PBXGroup;
+			children = (
+				885AC77117C48CAC00BA7DC8 /* UIExpandingTextView.h */,
+				885AC77217C48CAC00BA7DC8 /* UIExpandingTextView.m */,
+				885AC77317C48CAC00BA7DC8 /* UIExpandingTextViewInternal.h */,
+				885AC77417C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m */,
+				885AC77517C48CAC00BA7DC8 /* UIInputToolbar.h */,
+				885AC77617C48CAC00BA7DC8 /* UIInputToolbar.m */,
+			);
+			path = UIInputToolbar;
+			sourceTree = "<group>";
+		};
 		F42B53571485091500563B55 /* Player */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +130,7 @@
 		F4443E46148078F300B35F2D /* HSPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				885AC77017C48CAC00BA7DC8 /* UIInputToolbar */,
 				F42B53571485091500563B55 /* Player */,
 				F4443E4F148078F300B35F2D /* HSAppDelegate.h */,
 				F4443E50148078F300B35F2D /* HSAppDelegate.m */,
@@ -196,6 +219,9 @@
 				F4443E591480791200B35F2D /* HSPlayerView.m in Sources */,
 				F4443E6514809D3900B35F2D /* HSPlayerViewController.m in Sources */,
 				F42B535B1485092400563B55 /* HSSlider.m in Sources */,
+				885AC77717C48CAC00BA7DC8 /* UIExpandingTextView.m in Sources */,
+				885AC77817C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m in Sources */,
+				885AC77917C48CAC00BA7DC8 /* UIInputToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +245,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 冰慧 刘 (4QJD945A79)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -234,6 +261,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F5612C5-E873-481E-90C2-DEC3C33D0DA6";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -244,7 +272,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 冰慧 刘 (4QJD945A79)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -253,6 +282,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F5612C5-E873-481E-90C2-DEC3C33D0DA6";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -261,11 +291,14 @@
 		F4443E55148078F300B35F2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 冰慧 刘 (4QJD945A79)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HSPlayer/HSPlayer-Prefix.pch";
 				INFOPLIST_FILE = "HSPlayer/HSPlayer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F5612C5-E873-481E-90C2-DEC3C33D0DA6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -273,11 +306,14 @@
 		F4443E56148078F300B35F2D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 冰慧 刘 (4QJD945A79)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HSPlayer/HSPlayer-Prefix.pch";
 				INFOPLIST_FILE = "HSPlayer/HSPlayer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9F5612C5-E873-481E-90C2-DEC3C33D0DA6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
