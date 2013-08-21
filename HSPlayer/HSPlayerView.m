@@ -47,10 +47,12 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 
 @property (nonatomic, strong) UIView *bottomControlView;
 @property (nonatomic, strong) UIButton *playPauseControlButton;
+@property (nonatomic, strong) UIButton *popupAddButtion;
 
 // PopUps
 @property (nonatomic, strong) NSMutableArray *popUps;
 @property (nonatomic, readwrite) NSInteger slot;
+
 - (void)syncPopUps;
 -(void)pauseLayer:(CALayer*)layer;
 -(void)resumeLayer:(CALayer*)layer;
@@ -115,6 +117,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 
 @synthesize bottomControlView = _bottomControlView;
 @synthesize playPauseControlButton = _playPauseControlButton;
+@synthesize popupAddButtion = _popupAddButtion;
 
 @synthesize popUps = _popUps;
 @synthesize slot = _slot;
@@ -414,12 +417,15 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         [_bottomControlView setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth)];
         
         // MPVolumeView only shows on device, not simulator
-        MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(40., 11., _bottomControlView.bounds.size.width-50., 18.)];
+        MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(40., 11., _bottomControlView.bounds.size.width-100., 18.)];
         [volumeView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth)];
         [_bottomControlView addSubview:volumeView];
 
         [self.playPauseControlButton setFrame:CGRectMake(10., 10., 20., 20.)];
         [_bottomControlView addSubview:self.playPauseControlButton];
+        
+        [self.popupAddButtion setFrame:CGRectMake(_bottomControlView.bounds.size.width - 50, 10, 20, 20)];
+        [_bottomControlView addSubview:self.popupAddButtion];
     }
     
     return _bottomControlView;
@@ -433,6 +439,16 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         [_playPauseControlButton addTarget:self action:@selector(playPause:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _playPauseControlButton;
+}
+
+- (UIButton*)popupAddButtion {
+    if (!_popupAddButtion) {
+        _popupAddButtion = [UIButton buttonWithType:UIButtonTypeContactAdd];
+        [_popupAddButtion setShowsTouchWhenHighlighted:YES];
+        [_popupAddButtion setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
+        [_popupAddButtion addTarget:self action:@selector(addPopup:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _popupAddButtion;
 }
 
 #pragma mark - popups
@@ -672,6 +688,10 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
     [self.scrubberControlSlider setValue:currentSeconds];
     
     //NSLog(@"%@", self.player.currentItem.seekableTimeRanges);
+}
+
+- (void)addPopup:(id)sender {
+    
 }
 
 - (void)syncPopUps {

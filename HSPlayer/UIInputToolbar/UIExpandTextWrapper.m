@@ -13,6 +13,8 @@
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
+#define kTextEditDoneNotification @"kTextEditDone"
+
 @implementation UIExpandTextWrapper
 
 
@@ -89,6 +91,8 @@
 {
     /* Called when toolbar button is pressed */
     NSLog(@"Pressed button with text: '%@'", inputText);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTextEditDoneNotification object:inputText];
 }
 
 
