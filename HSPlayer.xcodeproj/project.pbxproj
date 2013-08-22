@@ -16,7 +16,6 @@
 		885AC77717C48CAC00BA7DC8 /* UIExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 885AC77217C48CAC00BA7DC8 /* UIExpandingTextView.m */; };
 		885AC77817C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 885AC77417C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m */; };
 		885AC77917C48CAC00BA7DC8 /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 885AC77617C48CAC00BA7DC8 /* UIInputToolbar.m */; };
-		88C46B0917C49D55007DBEAD /* UIExpandTextWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 88C46B0817C49D55007DBEAD /* UIExpandTextWrapper.m */; };
 		F42B535B1485092400563B55 /* HSSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = F42B535A1485092400563B55 /* HSSlider.m */; };
 		F4443E41148078F300B35F2D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4443E40148078F300B35F2D /* UIKit.framework */; };
 		F4443E43148078F300B35F2D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4443E42148078F300B35F2D /* Foundation.framework */; };
@@ -45,8 +44,6 @@
 		885AC77417C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIExpandingTextViewInternal.m; sourceTree = "<group>"; };
 		885AC77517C48CAC00BA7DC8 /* UIInputToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInputToolbar.h; sourceTree = "<group>"; };
 		885AC77617C48CAC00BA7DC8 /* UIInputToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputToolbar.m; sourceTree = "<group>"; };
-		88C46B0717C49D55007DBEAD /* UIExpandTextWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIExpandTextWrapper.h; sourceTree = "<group>"; };
-		88C46B0817C49D55007DBEAD /* UIExpandTextWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIExpandTextWrapper.m; sourceTree = "<group>"; };
 		F42B53591485092400563B55 /* HSSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSSlider.h; sourceTree = "<group>"; };
 		F42B535A1485092400563B55 /* HSSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSSlider.m; sourceTree = "<group>"; };
 		F4443E3C148078F300B35F2D /* HSPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HSPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,8 +99,6 @@
 				885AC77417C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m */,
 				885AC77517C48CAC00BA7DC8 /* UIInputToolbar.h */,
 				885AC77617C48CAC00BA7DC8 /* UIInputToolbar.m */,
-				88C46B0717C49D55007DBEAD /* UIExpandTextWrapper.h */,
-				88C46B0817C49D55007DBEAD /* UIExpandTextWrapper.m */,
 			);
 			path = UIInputToolbar;
 			sourceTree = "<group>";
@@ -251,7 +246,6 @@
 				885AC77717C48CAC00BA7DC8 /* UIExpandingTextView.m in Sources */,
 				885AC77817C48CAC00BA7DC8 /* UIExpandingTextViewInternal.m in Sources */,
 				885AC77917C48CAC00BA7DC8 /* UIInputToolbar.m in Sources */,
-				88C46B0917C49D55007DBEAD /* UIExpandTextWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
