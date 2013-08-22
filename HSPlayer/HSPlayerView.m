@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import "UIInputToolbar.h"
 
 // Constants
 CGFloat const HSPlayerViewControlsAnimationDelay = .4; // ~ statusbar fade duration
@@ -206,7 +207,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         frame.origin.y = self.frame.size.height - frame.size.height - kKeyboardHeightPortrait;
     }
     else {
-        frame.origin.y = self.frame.size.width - frame.size.height - kKeyboardHeightLandscape - kStatusBarHeight;
+        frame.origin.y = self.frame.size.height - frame.size.height - kKeyboardHeightLandscape - kStatusBarHeight;
     }
 	self.inputToolbar.frame = frame;
 	[UIView commitAnimations];
@@ -222,7 +223,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         frame.origin.y = self.frame.size.height;
     }
     else {
-        frame.origin.y = self.frame.size.width;
+        frame.origin.y = self.frame.size.height;
     }
 	self.inputToolbar.frame = frame;
 	[UIView commitAnimations];
@@ -521,7 +522,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
     if (!_inputToolbar) {
         // Add popup input bar
         _inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height, self.frame.size.width, kDefaultToolbarHeight)];
-        _inputToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        _inputToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         _inputToolbar.backgroundColor = [UIColor whiteColor];
         [self addSubview:_inputToolbar];
         _inputToolbar.inputDelegate = self;
@@ -779,11 +780,6 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
                          
                      }];
 }
-
-- (void)hidePopupInputToobar {
-    
-}
-
 
 - (void)syncPopUps {
     
