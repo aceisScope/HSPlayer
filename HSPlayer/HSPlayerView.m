@@ -55,6 +55,9 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
+#define kPopupTopMargin 10
+#define kPopupHeight 40
+
 // PopUps
 @property (nonatomic, strong) NSMutableArray *popUps;
 @property (nonatomic, readwrite) NSInteger slot;
@@ -772,22 +775,13 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 
 - (void)showPopupInputToobar {
     
-    [UIView animateWithDuration:.5
-                     animations:^{
-                         self.inputToolbar.frame = CGRectMake(0, self.frame.size.height-kDefaultToolbarHeight, self.frame.size.width, kDefaultToolbarHeight);
-                     }
-                     completion:^(BOOL finished) {
-                         
-                     }];
+    self.inputToolbar.frame = CGRectMake(0, self.frame.size.height-kDefaultToolbarHeight, self.frame.size.width, kDefaultToolbarHeight);
 }
 
 - (void)syncPopUps {
     
-    CGFloat topMargin = 10.f;
-    CGFloat height = 40.f;
-    
     if (CMTimeGetSeconds(self.player.currentTime) >= 4.5 && CMTimeGetSeconds(self.player.currentTime) <= 5.) {
-        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, topMargin + (self.slot%6)*height, 2*self.bounds.size.width, height)];
+        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, kPopupTopMargin + (self.slot%6)*kPopupHeight, 2*self.bounds.size.width, kPopupHeight)];
         pop.backgroundColor = [UIColor clearColor];
         pop.textColor = [UIColor whiteColor];
         pop.text = @"哈哈哈哈哈哈";
@@ -801,7 +795,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         
         [UIView animateWithDuration:3
                          animations:^(void){
-                             pop.frame = CGRectMake(-pop.frame.size.width, topMargin + (temp_slot%6)*height, pop.frame.size.width, height);
+                             pop.frame = CGRectMake(-pop.frame.size.width, kPopupTopMargin + (temp_slot%6)*kPopupHeight, pop.frame.size.width, kPopupHeight);
                          }
                          completion:^(BOOL finished){
                              [pop removeFromSuperview];
@@ -810,7 +804,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
     }
     
     if (CMTimeGetSeconds(self.player.currentTime) >= 6.5 && CMTimeGetSeconds(self.player.currentTime) <= 7.) {
-        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, topMargin + (self.slot%6)*height, 2*self.bounds.size.width, height)];
+        UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, kPopupTopMargin + (self.slot%6)*kPopupHeight, 2*self.bounds.size.width, kPopupHeight)];
         pop.backgroundColor = [UIColor clearColor];
         pop.textColor = [UIColor whiteColor];
         pop.text = @"吼吼吼吼吼吼吼吼吼~~~~~~";
@@ -824,7 +818,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         
         [UIView animateWithDuration:3
                          animations:^(void){
-                             pop.frame = CGRectMake(-pop.frame.size.width, topMargin + (temp_slot%6)*height, pop.frame.size.width, height);
+                             pop.frame = CGRectMake(-pop.frame.size.width, kPopupTopMargin + (temp_slot%6)*kPopupHeight, pop.frame.size.width, kPopupHeight);
                          }
                          completion:^(BOOL finished){
                              [pop removeFromSuperview];
@@ -889,6 +883,27 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 {
     /* Called when toolbar button is pressed */
     NSLog(@"Pressed button with text: '%@'", inputText);
+    
+    UILabel* pop = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width, kPopupTopMargin + (self.slot%6)*kPopupHeight, 2*self.bounds.size.width, kPopupHeight)];
+    pop.backgroundColor = [UIColor clearColor];
+    pop.textColor = [UIColor whiteColor];
+    pop.text = inputText;
+    [pop sizeToFit];
+    
+    NSInteger temp_slot = self.slot;
+    
+    [self.popUps addObject:pop];
+    self.slot ++;
+    [self addSubview:pop];
+    
+    [UIView animateWithDuration:3
+                     animations:^(void){
+                         pop.frame = CGRectMake(-pop.frame.size.width, kPopupTopMargin + (temp_slot%6)*kPopupHeight, pop.frame.size.width, kPopupHeight);
+                     }
+                     completion:^(BOOL finished){
+                         [pop removeFromSuperview];
+                         [_popUps removeObject:pop];
+                     }];
 }
 
 #pragma mark - Custom Images
