@@ -30,13 +30,13 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
         
-        /* Calculate screen size */
-        CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
+//        /* Calculate screen size */
+        CGRect screenFrame =  viewController.view.frame ; //[[UIScreen mainScreen] applicationFrame];
         
         /* Create toolbar */
-        self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight)];
+        self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, screenFrame.size.height, screenFrame.size.width, kDefaultToolbarHeight)];
         [self.superViewController.view addSubview:self.inputToolbar];
-        self.inputToolbar.inputDelegate = self;
+        self.inputToolbar.inputDelegate = (id<UIInputToolbarDelegate>)self.superViewController;
         self.inputToolbar.textView.placeholder = @"Placeholder";
     }
     return self;
@@ -54,11 +54,27 @@
 #pragma mark -  public
 - (void)showTextBar
 {
+    CGRect screenFrame =  self.superViewController.view.frame ; //[[UIScreen mainScreen] applicationFrame];
     
+    [UIView animateWithDuration:.5
+                     animations:^{
+                         self.inputToolbar.frame = CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
 }
 - (void)hideTextBar
 {
+    CGRect screenFrame =  self.superViewController.view.frame ; //[[UIScreen mainScreen] applicationFrame];
     
+    [UIView animateWithDuration:.5
+                     animations:^{
+                         self.inputToolbar.frame = CGRectMake(0, screenFrame.size.height, screenFrame.size.width, kDefaultToolbarHeight);
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
 }
 
 #pragma mark -
@@ -96,14 +112,6 @@
 	self.inputToolbar.frame = frame;
 	[UIView commitAnimations];
     keyboardIsVisible = NO;
-}
-
--(void)inputButtonPressed:(NSString *)inputText
-{
-    /* Called when toolbar button is pressed */
-    NSLog(@"Pressed button with text: '%@'", inputText);
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kTextEditDoneNotification object:inputText];
 }
 
 

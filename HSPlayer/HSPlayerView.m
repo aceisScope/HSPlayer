@@ -23,7 +23,7 @@ static void *HSPlayerViewPlayerItemStatusObservationContext = &HSPlayerViewPlaye
 static void *HSPlayerViewPlaterItemDurationObservationContext = &HSPlayerViewPlaterItemDurationObservationContext;
 static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlayerViewPlayerLayerReadyForDisplayObservationContext;
 
-@interface HSPlayerView () <UIGestureRecognizerDelegate>
+@interface HSPlayerView () <UIGestureRecognizerDelegate,UIInputToolbarDelegate>
 @property (nonatomic, strong, readwrite) AVPlayer *player;
 
 @property (nonatomic, strong) AVAsset *asset;
@@ -49,9 +49,17 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 @property (nonatomic, strong) UIButton *playPauseControlButton;
 @property (nonatomic, strong) UIButton *popupAddButtion;
 
+#define kStatusBarHeight 20
+#define kDefaultToolbarHeight 40
+#define kKeyboardHeightPortrait 216
+#define kKeyboardHeightLandscape 140
+
 // PopUps
 @property (nonatomic, strong) NSMutableArray *popUps;
 @property (nonatomic, readwrite) NSInteger slot;
+@property (nonatomic, strong) UIInputToolbar *inputToolbar;
+
+- (void)showPopupInputToobar;
 
 - (void)syncPopUps;
 -(void)pauseLayer:(CALayer*)layer;
@@ -121,6 +129,7 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 
 @synthesize popUps = _popUps;
 @synthesize slot = _slot;
+@synthesize inputToolbar = _inputToolbar;
 
 @synthesize singleTapRecognizer = _singleTapRecognizer;
 @synthesize doubleTapRecognizer = _doubleTapRecognizer;
@@ -161,9 +170,62 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         [self setFullScreen:YES];
         
         [self setRestoreAfterScrubbingRate:1.];
+        
+        /* Listen for keyboard */
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     }
     
     return self;
+}
+
+#pragma mark Notifications
+
+- (UIViewController*)viewController
+{
+    for (UIView* next = [self superview]; next; next = next.superview)
+    {
+        UIResponder* nextResponder = [next nextResponder];
+        
+        if ([nextResponder isKindOfClass:[UIViewController class]])
+        {
+            return (UIViewController*)nextResponder;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    /* Move the toolbar to above the keyboard */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+	CGRect frame = self.inputToolbar.frame;
+    if (UIInterfaceOrientationIsPortrait([self viewController].interfaceOrientation)) {
+        frame.origin.y = self.frame.size.height - frame.size.height - kKeyboardHeightPortrait;
+    }
+    else {
+        frame.origin.y = self.frame.size.width - frame.size.height - kKeyboardHeightLandscape - kStatusBarHeight;
+    }
+	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    /* Move the toolbar back to bottom of the screen */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+	CGRect frame = self.inputToolbar.frame;
+    if (UIInterfaceOrientationIsPortrait([self viewController].interfaceOrientation)) {
+        frame.origin.y = self.frame.size.height;
+    }
+    else {
+        frame.origin.y = self.frame.size.width;
+    }
+	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
 }
 
 #pragma mark KVO
@@ -252,6 +314,10 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
 
 - (void)dealloc {
     [self removePlayerTimeObserver];
+    
+    /* No longer listen for keyboard */
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
 	[self.player removeObserver:self forKeyPath:@"rate"];
     [self.player removeObserver:self forKeyPath:@"currentItem"];
@@ -446,9 +512,22 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
         _popupAddButtion = [UIButton buttonWithType:UIButtonTypeContactAdd];
         [_popupAddButtion setShowsTouchWhenHighlighted:YES];
         [_popupAddButtion setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
-        [_popupAddButtion addTarget:self action:@selector(addPopup:) forControlEvents:UIControlEventTouchUpInside];
+        [_popupAddButtion addTarget:self action:@selector(showPopupInputToobar) forControlEvents:UIControlEventTouchUpInside];
     }
     return _popupAddButtion;
+}
+
+- (UIInputToolbar*)inputToolbar {
+    if (!_inputToolbar) {
+        // Add popup input bar
+        _inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height, self.frame.size.width, kDefaultToolbarHeight)];
+        _inputToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        _inputToolbar.backgroundColor = [UIColor whiteColor];
+        [self addSubview:_inputToolbar];
+        _inputToolbar.inputDelegate = self;
+        _inputToolbar.textView.placeholder = @"Bravo!";
+    }
+    return _inputToolbar;
 }
 
 #pragma mark - popups
@@ -690,24 +769,21 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
     //NSLog(@"%@", self.player.currentItem.seekableTimeRanges);
 }
 
-- (void)addPopup:(id)sender {
-    UIExpandTextWrapper *wrapper = [[UIExpandTextWrapper alloc] initWithSuperViewController:[self viewController]];
+- (void)showPopupInputToobar {
+    
+    [UIView animateWithDuration:.5
+                     animations:^{
+                         self.inputToolbar.frame = CGRectMake(0, self.frame.size.height-kDefaultToolbarHeight, self.frame.size.width, kDefaultToolbarHeight);
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
 }
 
-- (UIViewController*)viewController
-{
-    for (UIView* next = [self superview]; next; next = next.superview)
-    {
-        UIResponder* nextResponder = [next nextResponder];
-        
-        if ([nextResponder isKindOfClass:[UIViewController class]])
-        {
-            return (UIViewController*)nextResponder;
-        }
-    }
+- (void)hidePopupInputToobar {
     
-    return nil;
 }
+
 
 - (void)syncPopUps {
     
@@ -809,6 +885,14 @@ static void *HSPlayerViewPlayerLayerReadyForDisplayObservationContext = &HSPlaye
             return NO;
 
     return YES;
+}
+
+#pragma mark - UIInputToolbarDelegate
+
+-(void)inputButtonPressed:(NSString *)inputText
+{
+    /* Called when toolbar button is pressed */
+    NSLog(@"Pressed button with text: '%@'", inputText);
 }
 
 #pragma mark - Custom Images
